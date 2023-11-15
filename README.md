@@ -1,5 +1,14 @@
 # Scalable and Effective Generative Information Retrieval
-This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval]() (RIPOR).
+This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval]() (RIPOR). We propose RIPOR, a optimization framework for generative retrieval. RIPOR is designed based on two often-overlooked fundamental design considerations in generative retrieval. To addresse the issues, we propose a novel prefix-oriented ranking optimization algorithm and relevance-based DocID initialization, which illustrated in the following Figure. The main experiment is conducted on large-scale information retrieval benchmark MSMARCO-8.8M, and evaluated on three evaluation sets MSMARCO-Dev, TREC'19 and 20. RIPOR surpasses state-of-the-art generative retrieval models by a large margin (e.g., 30.5% MRR improvements on MS MARCO Dev Set), and perform better on par with popular dense retrieval models.
+
+<p align="center">
+  <img align="center" src="./architecture.png" width="750" />
+</p>
+<p align="center">
+  <b>Figure:</b> An overview of the RIPOR framework. The top two sub-figures illustrate the novel components in RIPOR framework,
+detailed in Sections 3.1 and 3.2. The bottom sub-figure presents the complete optimization pipeline
+</p>
+
 
 ## Package installation
 - pip install -r requirement.txt 
@@ -7,7 +16,7 @@ This repo provides the source code and checkpoints for our paper [Scalable and E
 - conda install -c conda-forge faiss-gpu 
 
 ## Download files 
-All necessary training files and checkpoints can be downloaded from [Google Disk Ripor_data](https://drive.google.com/drive/u/1/folders/1LLrOoXQq49hGoTMH1b7yyOlUvctmL6Ah). First you should download `RIPOR_data/data/`
+All necessary training files and checkpoints can be downloaded from [Ripor_data](https://drive.google.com/drive/u/1/folders/1LLrOoXQq49hGoTMH1b7yyOlUvctmL6Ah). First you should download `RIPOR_data/data/`
 - If you only want to do inference, you just need to download the following files:
     - `RIPOR_data/experiments-full-t5seq-aq/t5_docid_gen_encoder_1/aq_smtid/docid_to_smtid.json`
     - `RIPOR_data/$experiment_dir/t5seq_aq_encoder_seq2seq_1_lng_knp_self_mnt_32_dcy_2/checkpoint`
