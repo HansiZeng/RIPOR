@@ -3,7 +3,7 @@ import ujson
 import numpy as np 
 
 # max_new_token = 8
-for max_new_token in [16, 32]:
+for max_new_token in [4, 8, 16, 32]:
     decay = 2
     keep_top100 = True
     decay_to_factor = {
@@ -15,7 +15,7 @@ for max_new_token in [16, 32]:
     factor = decay_to_factor[decay][max_new_token]
     print("factor: ", factor, "max_new_token: ", max_new_token, "keep_top100: ", keep_top100)
 
-    root_dir = "/home/ec2-user/quic-efs/user/hansizeng/work/t5_pretrainer/t5_pretrainer/experiments-full-4-4096-28-256-t5seq-aq/"
+    root_dir = "./experiments-full-t5seq-aq/"
     original_qid_smtid_rerank_path = os.path.join(root_dir, f"t5_docid_gen_encoder_1/sub_smtid_{max_new_token}_out/qid_smtid_docids_teacher_score.train.json")
     self_qid_smtid_rerank_path = os.path.join(root_dir, f"t5seq_aq_encoder_seq2seq_1/sub_smtid_{max_new_token}_out/qid_smtid_docids_teacher_score.train.json")
     out_dir = os.path.join(root_dir, f"t5seq_aq_encoder_seq2seq_1/sub_smtid_train_decay{decay}/")

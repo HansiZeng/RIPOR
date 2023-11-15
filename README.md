@@ -7,16 +7,16 @@ This repo provides the source code and checkpoints for our paper [Scalable and E
 - conda install -c conda-forge faiss-gpu 
 
 ## Inference 
-We use 4 A100 GPUs to run the model. It takes rougly 20 mins to do preprocessing and 90 mins for whole evaluation. You can use other types of GPUS like V100, but might take longer time.
+We use 4 A100 GPUs to run the model. You can use other types of GPUS like V100, but might take longer time.
 ``` 
 bash full_scripts/full_evaluate_t5seq_aq_encoder.sh 
 ```
-
+The results you obtain should be the same as reported in our paper.
 ## Training
 Our framework contains multiple training phases (see details from Figure 2 in the paper). You can train it sequentially from the starting phase or we provide the checkpoint for each phase that you can directly use it for the subsequent phases. 
 
-### Phase 1: Relevance-Based DocID initialization ($M^0$)
-You will start from `t5-base` and obtain the model `$M^0$` after this phase. This phase treat the T5 model as a dense encoder, and we use the two-stage training strategy to train it. In first stage, we use the BM25 negatives. You should run the following script to train the model:
+### Phase 1: Relevance-Based DocID initialization ( $M^0$ )
+You will start from `t5-base` and obtain the model $M^0$ after this phase. This phase treat the T5 model as a dense encoder, and we use the two-stage training strategy to train it. In first stage, we use the BM25 negatives. You should run the following script to train the model:
 ```
 bash full_scripts/full_train_t5seq_encoder_0.sh
 ```
@@ -62,10 +62,28 @@ Download all files from `experiments-full-t5seq-aq/t5_docid_gen_encoder_1` and `
 bash full_scripts/full_lng_knp_train_pipline.sh
 ```
 #### If you do not skip the phase 1 and phase 2
-You are a hard-working person that train all models by yourself. You are only one step away from success! But be patient, it might take some time. Since we build the DocID by ourselves, we should generate our own training data. Follow the following procedures for data generation. 
-- Apply the constrained beam search on $M^2$ to generate data for different prefix length:
-    Change the `task` variable in line 3 as `t5seq_aq_get_qid_to_smtid_rankdata` in script `full_scripts/full_evaluate_t5seq_aq_encoder.sh`. Then run the script:
+You are only one step away from success! But be patient, it might take some time. Since we build the DocID by ourselves, we should generate our own training data. Follow the following procedures for data generation. 
+- Apply the constrained beam search on $M^2$ to generate training data for different prefix length:
+    Change the `task` variable in line 3 as `task=t5seq_aq_get_qid_to_smtid_rankdata` in script `full_scripts/full_evaluate_t5seq_aq_encoder.sh`. Then run the script:
     ```
     full_scripts/full_evaluate_t5seq_aq_encoder.sh
     ```
-- 
+    Note that in our paper (Sec 3.3.3), we call the training data as $\mathcal{D}^B$
+- In our paper (Sec 3.3.3), we combine $\mathcal{D}^B$ with training data $\mathcal{D}^R$ provided from the dense encoder provided by $M^0$. To let $\mathcal{D}^R$ having the same format as $$\mathcal{D}^B$, we run the following scripts:
+    ```
+    python t5_pretrainer/aq_preprocess/get_qid_smtid_docids_from_teacher_rerank_data.py 
+    ```
+    ```
+    bash full_scripts/rerank_qid_smtid_docids_0.sh
+    ```
+- We combine the $\mathcal{D}^B$ and $\mathcal{D}^R$ and create the training examples for this phase by the following scripts:
+    ```
+    python t5_pretrainer/aq_preprocess/get_qid_smtids_scores_jsonl_examples.py
+    ```
+    ```
+    python t5_pretrainer/aq_preprocess/fully_create_lng_knp_examples_from_original_examples.py
+    ```
+Awesome! You have all files needed for training. Run the script for training:
+```
+bash full_scripts/full_lng_knp_train_pipline.sh 
+```
