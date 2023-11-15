@@ -1,10 +1,18 @@
 # Scalable and Effective Generative Information Retrieval
-This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval]() (RIPOR)
+This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval]() (RIPOR).
 
 ## Package installation
 - pip install -r requirement.txt 
 - pip install torch==1.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 - conda install -c conda-forge faiss-gpu 
+
+## Download files 
+All necessary training files and checkpoints can be downloaded from [Google Disk Ripor_data](https://drive.google.com/drive/u/1/folders/1LLrOoXQq49hGoTMH1b7yyOlUvctmL6Ah). First you should download `RIPOR_data/data/`
+- If you only want to do inference, you just need to download the following files:
+    - `RIPOR_data/experiments-full-t5seq-aq/t5_docid_gen_encoder_1/aq_smtid/docid_to_smtid.json`
+    - `RIPOR_data/$experiment_dir/t5seq_aq_encoder_seq2seq_1_lng_knp_self_mnt_32_dcy_2/checkpoint`
+- If you want to train models by youself:
+    Please read the `Training` section carefully and download the files you need. 
 
 ## Inference 
 We use 4 A100 GPUs to run the model. You can use other types of GPUS like V100, but might take longer time.
