@@ -1,6 +1,7 @@
 # customized
 experiments-full-t5seq-aq/
 wandb/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

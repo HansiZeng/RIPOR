@@ -16,6 +16,8 @@ from .dataset.dataset import (
     PseudoQueryForScoreDataset, 
     QueryToSmtidRerankDataset, 
     TeacherRerankFromQidSmtidsDataset,
+    CrossEncRerankForSamePrefixPair,
+    RerankDataset
 )
 from .dataset.dataloader import (
     CrossEncRerankDataLoader, 

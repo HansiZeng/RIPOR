@@ -10,7 +10,7 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--model_dir", 
-                        default="/home/ec2-user/quic-efs/user/hansizeng/work/t5_pretrainer/t5_pretrainer/experiments-full-sent-t5-t5seq-aq/t5_docid_gen_encoder_1",
+                        default=None,
                         type=str)
     
     return parser.parse_args()

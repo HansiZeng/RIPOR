@@ -1,18 +1,17 @@
 #!/bin/bash
 
-data_root_dir=/home/ec2-user/quic-efs/user/hansizeng/work/data/msmarco-full
+data_root_dir=./data/msmarco-full
 collection_path=$data_root_dir/full_collection/
-queries_path=/home/ec2-user/quic-efs/user/hansizeng/work/data/msmarco-full/all_train_queries/train_queries
+queries_path=./data/msmarco-full/all_train_queries/train_queries
 
 # model dir
 experiment_dir=experiments-full-t5seq-aq
-model_dir="/home/ec2-user/quic-efs/user/hansizeng/work/t5_pretrainer/t5_pretrainer/$experiment_dir/t5_docid_gen_encoder_0"
-pretrained_path=$model_dir/checkpoint/
+pretrained_path=t5-base
 
 # train_examples path
-teacher_score_path=$model_dir/all_train/MSMARCO_TRAIN/qrel_added_qid_docids_teacher_scores.train.json
-run_name=t5_docid_gen_encoder_1
-output_dir="/home/ec2-user/quic-efs/user/hansizeng/work/t5_pretrainer/t5_pretrainer/$experiment_dir/"
+teacher_score_path=./data/msmarco-full/bm25_run/qrel_added_qid_docids_teacher_scores.train.json
+run_name=t5_docid_gen_encoder_0
+output_dir="./$experiment_dir/"
 
 python -m torch.distributed.launch --nproc_per_node=8 -m t5_pretrainer.main \
         --epochs=50 \

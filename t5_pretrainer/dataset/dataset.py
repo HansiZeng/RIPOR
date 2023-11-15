@@ -189,6 +189,44 @@ class TeacherRerankFromQidSmtidsDataset(Dataset):
             "doc": doc,
         }
 
+class CrossEncRerankForSamePrefixPair(Dataset):
+    def __init__(self, qid_to_smtid_to_docids, queries_path, collection_path):
+        self.qid_to_query = {}
+        with open(queries_path) as fin:
+            for line in fin:
+                qid, query = line.strip().split("\t")
+                self.qid_to_query[qid] = query 
+        
+        self.docid_to_doc = {}
+        with open(collection_path) as fin:
+            for line in fin:
+                docid, doc = line.strip().split("\t")
+                self.docid_to_doc[docid] = doc 
+
+        self.qid_to_smtid_to_docids = qid_to_smtid_to_docids
+        self.triples = []
+        
+        for i, qid in enumerate(tqdm(self.qid_to_smtid_to_docids, total=len(self.qid_to_smtid_to_docids))):
+            for smtid, docids in self.qid_to_smtid_to_docids[qid].items():
+                for docid in docids:
+                    triple = (qid, docid, smtid)
+                    self.triples.append(triple)
+
+
+    def __len__(self):
+        return len(self.triples)
+
+    def __getitem__(self, idx):
+        qid, docid, smtid = self.triples[idx]
+        query = self.qid_to_query[qid]
+        doc = self.docid_to_doc[docid]
+
+        return {
+            "triple_id": (qid, docid, smtid),
+            "query": query,
+            "doc": doc
+        }
+
 # for evaluate
 class CollectionDatasetPreLoad(Dataset):
     """
