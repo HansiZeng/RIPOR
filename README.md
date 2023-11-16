@@ -1,5 +1,5 @@
 # Scalable and Effective Generative Information Retrieval
-This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval]() (RIPOR). We propose RIPOR, a optimization framework for generative retrieval. RIPOR is designed based on two often-overlooked fundamental design considerations in generative retrieval. To addresse the issues, we propose a novel prefix-oriented ranking optimization algorithm and relevance-based DocID initialization, which illustrated in the following Figure. The main experiment is conducted on large-scale information retrieval benchmark MSMARCO-8.8M, and evaluated on three evaluation sets MSMARCO-Dev, TREC'19 and 20. RIPOR surpasses state-of-the-art generative retrieval models by a large margin (e.g., 30.5% MRR improvements on MS MARCO Dev Set), and perform better on par with popular dense retrieval models.
+This repo provides the source code and checkpoints for our paper [Scalable and Effective Generative Information Retrieval](https://arxiv.org/pdf/2311.09134.pdf) (RIPOR). We propose RIPOR, a optimization framework for generative retrieval. RIPOR is designed based on two often-overlooked fundamental design considerations in generative retrieval. To addresse the issues, we propose a novel prefix-oriented ranking optimization algorithm and relevance-based DocID initialization, which illustrated in the following Figure. The main experiment is conducted on large-scale information retrieval benchmark MSMARCO-8.8M, and evaluated on three evaluation sets MSMARCO-Dev, TREC'19 and 20. RIPOR surpasses state-of-the-art generative retrieval models by a large margin (e.g., 30.5% MRR improvements on MS MARCO Dev Set), and perform better on par with popular dense retrieval models.
 
 <p align="center">
   <img align="center" src="./arch.png" width="850" />
@@ -82,7 +82,7 @@ You are only one step away from success! But be patient, it might take some time
     full_scripts/full_evaluate_t5seq_aq_encoder.sh
     ```
     Note that in our paper (Sec 3.3.3), we call the training data as $\mathcal{D}^B$
-- In our paper (Sec 3.3.3), we combine $\mathcal{D}^B$ with training data $\mathcal{D}^R$ provided from the dense encoder provided by $M^0$. To let $\mathcal{D}^R$ having the same format as $$\mathcal{D}^B$, we run the following scripts:
+- In our paper (Sec 3.3.3), we combine $\mathcal{D}^B$ with training data $\mathcal{D}^R$ provided from the dense encoder provided by $M^0$. To let $\mathcal{D}^R$ having the same format as $\mathcal{D}^B$, we run the following scripts:
     ```
     python t5_pretrainer/aq_preprocess/get_qid_smtid_docids_from_teacher_rerank_data.py 
     ```
