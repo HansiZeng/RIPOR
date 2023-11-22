@@ -93,6 +93,7 @@ def main():
             elif args.loss_type == "t5seq_aq_encoder_lng_knp_margin_mse":
                 model = T5SeqAQEncoderForLngKnpMarginMSE.from_pretrained(args.pretrained_path)
             else:
+                print("pretrained_path: ", args.pretrained_path)
                 raise NotImplementedError
             if args.local_rank <= 0:
                 print("load model from pretrained path = {}".format(args.pretrained_path))

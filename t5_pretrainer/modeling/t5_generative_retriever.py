@@ -48,7 +48,7 @@ class T5forDocIDConfig(T5Config):
                     # 5_000, 5_000, 5_000, 5_000, 5_000, 5_000, 5_000, 5_000
                     #[50_000, 50_000, 50_000, 50_000],  #[100_000, 100_000], 
                  decoding=False,
-                 decoder_start_token_path="/home/ec2-user/quic-efs/user/hansizeng/work/t5_pretrainer/t5_pretrainer/t5_decoder_start_token_embeds/t5-base.npy",
+                 decoder_start_token_path="./t5_decoder_start_token_embeds/t5-base.npy",
                  apply_decoder_t5_stack=False,
                  scaleup_output_hidden=False,
                  shared_output_input_embeds=True,
