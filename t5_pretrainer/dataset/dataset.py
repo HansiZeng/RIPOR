@@ -615,3 +615,68 @@ class MarginMSEforT5SeqAQDataset(Dataset):
         return q_pos, q_neg, pos_doc_encoding, neg_doc_encoding, s_pos, s_neg, \
         q_pos_decoder_input_ids, q_neg_decoder_input_ids
 
+class MarginMSEforPretrainDataset(Dataset):
+    def __init__(self, dataset_path, document_dir, query_dir, qrels_path,
+                 docid_to_smtid_path):
+        self.document_dataset = CollectionDatasetPreLoad(document_dir, id_style="content_id")
+        self.query_dataset = CollectionDatasetPreLoad(query_dir, id_style="content_id")
+        
+        self.examples = []
+        with open(dataset_path) as fin:
+            for line in fin:
+                self.examples.append(ujson.loads(line))
+
+        if docid_to_smtid_path is not None:
+            with open(docid_to_smtid_path) as fin: 
+                self.docid_to_smtid = ujson.load(fin)
+            tmp_docids = list(self.docid_to_smtid.keys())
+            assert self.docid_to_smtid[tmp_docids[0]][0] == -1, self.docid_to_smtid[tmp_docids[0]]
+        else:
+            self.docid_to_smtid = None 
+
+
+    def __len__(self):
+        return len(self.examples)
+
+    def __getitem__(self, idx):
+        example = self.examples[idx]
+        query = example["qid"]
+        positive = example["docids"][0]
+        s_pos = example["scores"][0]
+
+        neg_idx = random.sample(range(1, len(example["docids"])), k=1)[0]
+        negative = example["docids"][neg_idx]
+        s_neg = example["scores"][neg_idx]
+        #assert negative != positive, (positive, negative)
+
+        q = self.query_dataset[str(query)][1]
+        d_pos = self.document_dataset[positive][1]
+        d_neg = self.document_dataset[negative][1]
+
+        if self.docid_to_smtid is not None:
+            pos_prev_smtids = self.docid_to_smtid[str(positive)][1:]
+            neg_prev_smtids = self.docid_to_smtid[str(negative)][1:]
+
+            d_pos_decoder_input_ids = self.docid_to_smtid[str(positive)]
+            d_neg_decoder_input_ids = self.docid_to_smtid[str(negative)]
+            q_pos_decoder_input_ids = copy.deepcopy(d_pos_decoder_input_ids)
+            q_neg_decoder_input_ids = copy.deepcopy(d_neg_decoder_input_ids)
+        else:
+            pos_prev_smtids = None 
+            neg_prev_smtids = None
+            d_pos_decoder_input_ids = [-1]
+            d_neg_decoder_input_ids = [-1]
+            q_pos_decoder_input_ids = [-1]
+            q_neg_decoder_input_ids = [-1]
+
+        q_pos = "query: " + q.strip()
+        q_neg = "query: " + q.strip()
+        d_pos = "document: " + d_pos.strip()
+        d_neg = "document: " + d_neg.strip()
+
+        if pos_prev_smtids is None and neg_prev_smtids is None:
+            return q_pos, q_neg, d_pos, d_neg, s_pos, s_neg, \
+            d_pos_decoder_input_ids, d_neg_decoder_input_ids, q_pos_decoder_input_ids, q_neg_decoder_input_ids 
+        else:
+            return q_pos, q_neg, d_pos, d_neg, pos_prev_smtids, neg_prev_smtids, s_pos, s_neg, \
+            d_pos_decoder_input_ids, d_neg_decoder_input_ids, q_pos_decoder_input_ids, q_neg_decoder_input_ids

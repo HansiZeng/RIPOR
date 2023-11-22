@@ -20,12 +20,13 @@ from .dataset.dataset import (
     MarginMSEforT5SeqAQDataset,
     Seq2SeqForT5SeqAQDataset,
     LngKnpMarginMSEforT5SeqAQDataset,
+    MarginMSEforPretrainDataset,
 )
 from .dataset.data_collator import (
     MarginMSEforT5SeqAQCollator,
     Seq2SeqForT5SeqAQCollator,
     LngKnpMarginMSEforT5SeqAQCollator,
-    TripleMarginMSECollator
+    MarginMSEforPretrainCollator
 )
 from .arguments import ModelArguments, Arguments
 from .losses.regulariaztion import RegWeightScheduler
@@ -50,14 +51,13 @@ def main():
         if args.local_rank <= 0:
             print(f"apply t5_docid_gen_encoder for data, model_name_or_path: {model_args.model_name_or_path}")
 
-        if args.loss_type == "t5seq_pretrain_margin_mse":
-            if args.triple_margin_mse_path is not None:
-                assert args.teacher_score_path is None
-                train_dataset = TripleMarginMSEDataset(examples_path=args.triple_margin_mse_path,
-                                                document_dir=args.collection_path,
-                                                query_dir=args.queries_path,
-                                                docid_to_smtid_path=args.docid_to_smtid_path)
-            train_collator = TripleMarginMSECollator(model_args.model_name_or_path, max_length=args.max_length)
+        if args.loss_type == "t5seq_pretrain_margin_mse":   
+            train_dataset = MarginMSEforPretrainDataset(dataset_path=args.teacher_score_path,
+                                            document_dir=args.collection_path,
+                                            query_dir=args.queries_path,
+                                            qrels_path=args.qrels_path,
+                                            docid_to_smtid_path=args.docid_to_smtid_path)
+            train_collator = MarginMSEforPretrainCollator(model_args.model_name_or_path, max_length=args.max_length)
         elif args.loss_type == "t5seq_aq_encoder_margin_mse":
             train_dataset = MarginMSEforT5SeqAQDataset(dataset_path=args.teacher_score_path,
                                                        document_dir=args.collection_path,

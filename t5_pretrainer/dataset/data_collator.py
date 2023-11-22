@@ -149,7 +149,7 @@ class MarginMSEforT5SeqAQCollator:
             "teacher_neg_scores": torch.FloatTensor(s_neg)
         }
  
-class TripleMarginMSECollator:
+class MarginMSEforPretrainCollator:
     def __init__(self, tokenizer_type, max_length):
         self.max_length = max_length
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_type)
@@ -220,36 +220,4 @@ class TripleMarginMSECollator:
 
             "teacher_pos_score": torch.FloatTensor(s_pos),
             "teacher_neg_score": torch.FloatTensor(s_neg),
-        }
-
-    def __init__(self, tokenizer_type, max_length):
-        self.max_length = max_length
-        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_type)
-
-    def __call__(self, batch):
-        queries, nway_passages, nway_scores = [], [], []
-        for elem in batch:
-            queries.append(elem["query"])
-            nway_passages.append(elem["passages"])
-            nway_scores.append(elem["scores"])
-            
-        queries = self.tokenizer(queries,
-                           add_special_tokens=True,
-                           padding="longest",  # pad to max sequence length in batch
-                           truncation="longest_first",  # truncates to self.max_length
-                           max_length=self.max_length,
-                           return_attention_mask=True,
-                           return_tensors="pt")
-        nway_passages = self.tokenizer(flatten_list(nway_passages),
-                                        add_special_tokens=True,
-                                        padding="longest",  # pad to max sequence length in batch
-                                        truncation="longest_first",  # truncates to self.max_length
-                                        max_length=self.max_length,
-                                        return_attention_mask=True,
-                                        return_tensors="pt") #[bzxnway, seq_len]
-        
-        return {
-            "enc_query": queries,
-            "enc_nway_docs": nway_passages,
-            "labels": torch.FloatTensor(nway_scores)
         }
