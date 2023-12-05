@@ -2,6 +2,7 @@
 experiments-full-t5seq-aq/
 wandb/
 data/
+my_scripts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
