@@ -12,7 +12,7 @@ This repo provides the source code and checkpoints for our paper [Scalable and E
 - conda install -c conda-forge faiss-gpu 
 
 ## Download files 
-All necessary training files and checkpoints can be downloaded from [Ripor_data](). First you should download `RIPOR_data/data/`
+All necessary training files and checkpoints can be downloaded from [Ripor_data](https://drive.google.com/drive/u/2/folders/1LNYVQlRFanqNG2EsOjO5MzpyqhZMDiI4). First you should download `RIPOR_data/data/`
 - If you only want to do inference, you just need to download the following files:
     - `RIPOR_data/experiments-full-t5seq-aq/t5_docid_gen_encoder_1/aq_smtid/docid_to_smtid.json`
     - `RIPOR_data/$experiment_dir/t5seq_aq_encoder_seq2seq_1_lng_knp_self_mnt_32_dcy_2/checkpoint`
