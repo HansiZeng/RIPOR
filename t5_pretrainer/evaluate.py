@@ -555,9 +555,10 @@ def t5seq_aq_get_qid_to_smtid_rankdata(args):
     if len(set(model.config.decoder_vocab_sizes)) == 1:
             prefix_constrain_processor = PrefixConstrainLogitProcessorFastSparse(list_smtid_to_nextids, model.config.decoder_vocab_sizes[0])
     elif len(set(model.config.decoder_vocab_sizes)) == 2:
-        print("the decoder_vocab_sizes are not same, hence use multishape PrefixConstrain")
-        prefix_constrain_processor = PrefixConstrainLogitProcessorFastSparseMultiShape(list_smtid_to_nextids, 
-                                                                                        model.config.decoder_vocab_sizes)
+        raise NotImplementedError
+        #print("the decoder_vocab_sizes are not same, hence use multishape PrefixConstrain")
+        #prefix_constrain_processor = PrefixConstrainLogitProcessorFastSparseMultiShape(list_smtid_to_nextids, 
+        #                                                                                model.config.decoder_vocab_sizes)
     else:
         raise ValueError("not valid decoder_vocab_size")
 

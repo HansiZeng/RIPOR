@@ -3,6 +3,8 @@ experiments-full-t5seq-aq/
 wandb/
 data/
 my_scripts/
+msmarco-full/
+sbatch_jobs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
