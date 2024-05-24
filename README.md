@@ -7,7 +7,7 @@ This repo provides the source code and checkpoints for our paper [Scalable and E
 
 
 ## Package installation
-- pip install -r requirement.txt 
+- pip install -r requirements.txt 
 - pip install torch==1.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 - conda install -c conda-forge faiss-gpu 
 
